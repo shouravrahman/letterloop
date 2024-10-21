@@ -243,9 +243,10 @@ const FeaturesGrid = () => {
 		<section className="flex justify-center items-center w-full bg-base-200/50 text-base-content py-20 lg:py-32">
 			<div className="flex flex-col max-w-[82rem] gap-16 md:gap-20 px-4">
 				<h2 className="max-w-3xl font-black text-4xl md:text-6xl tracking-[-0.01em]">
-					Ship features <br /> users{" "}
+					Create
+					<br /> and{" "}
 					<span className="underline decoration-dashed underline-offset-8 decoration-base-300">
-						really want
+						distribute
 					</span>
 				</h2>
 				<div className="flex flex-col w-full h-fit gap-4 lg:gap-10 text-text-default max-w-[82rem]">
@@ -259,7 +260,9 @@ const FeaturesGrid = () => {
 									<h3 className="font-bold text-xl lg:text-3xl tracking-tight">
 										{feature.title}
 									</h3>
-									<p className="opacity-80">{feature.description}</p>
+									<p className="opacity-80">
+										{feature.description}
+									</p>
 								</div>
 								{feature.demo}
 							</div>

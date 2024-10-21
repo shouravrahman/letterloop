@@ -88,7 +88,7 @@ const list: {
 		// Link to the person's testimonial. It's more trustable
 		link: "https://twitter.com/letterloop",
 		// A statically imported image (usually from your public folder—recommended) or a link to the person's avatar. Shows a fallback letter if not provided
-		img: "https://pbs.twimg.com/profile_images/1514863683574599681/9k7PqDTA_400x400.jpg",
+		img: "https://pbs.twimg.com/profile_images/1514863683574599681/s.jpg",
 		// You can display video testimonials to build more trust. Just swap the type above to "video" and add at least the video source below
 		// videoSrc: "/jack.mp4"
 	},
@@ -135,7 +135,8 @@ const list: {
 		text: "The tool is exactly what I didn't even know I needed.",
 		videoPoster:
 			"https://d1wkquwg5s1b04.cloudfront.net/demo/letterloopPoster.jpg",
-		videoSrc: "https://d1wkquwg5s1b04.cloudfront.net/demo/letterloopVideo.mp4",
+		videoSrc:
+			"https://d1wkquwg5s1b04.cloudfront.net/demo/letterloopVideo.mp4",
 		videoHeight: 250,
 		videoWidth: 500,
 		type: refTypes.video,
