@@ -1,6 +1,7 @@
 "use server";
 
-import connectDB from "@/lib/mongodb";
+
+import { connectDB } from "@/lib/mongodb";
 import Email from "@/models/Email";
 
 export const getDetails = async ({
