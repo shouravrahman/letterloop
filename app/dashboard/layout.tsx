@@ -18,13 +18,14 @@ export default async function LayoutPrivate({
    if (!isAuthenticated) redirect("/")
 
    return (
-      <div className="flex flex-grow">
-         <aside className="">
-            <DashboardSidebar />
-         </aside>
-         <main className="w-full" >
-            <DashboardNavbar />
-            {children}</main>
-      </div>
+		<div className="flex flex-grow">
+			<aside className="h-full">
+				<DashboardSidebar />
+			</aside>
+			<main className="w-full">
+				<DashboardNavbar />
+				{children}
+			</main>
+		</div>
    );
 }

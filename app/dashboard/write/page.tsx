@@ -1,9 +1,9 @@
-import CreateNewsletterCard from "@/components/dashboard/CreateNewsletterCard.tsx";
+import Write from "@/components/dashboard/Write";
 
 const page = () => {
 	return (
 		<div className="flex ">
-			<CreateNewsletterCard />
+			<Write />
 		</div>
 	);
 };

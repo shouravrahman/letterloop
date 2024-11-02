@@ -1,6 +1,7 @@
 "use client";
 import { getDetails } from "@/actions/getEmailDetails";
-import { defaultMail } from "@/data/mails/default.ts";
+import { saveEmail } from "@/actions/saveEmail";
+import { simpleEmailTemplate } from "@/data/mails/default.ts";
 import apiClient from "@/lib/api";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from "next/navigation";
@@ -9,45 +10,51 @@ import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
 import { toast } from "sonner";
 const Editor = ({ subject }: { subject: string }) => {
 	const [loading, setLoading] = useState(true);
-	const [data, setData] = useState(defaultMail);
+	const [data, setData] = useState(simpleEmailTemplate);
 	const history = useRouter();
 	const { getUser } = useKindeBrowserClient();
 	const user = getUser();
 	const emailEditorRef = useRef<EditorRef>(null);
+
+	const exportHtml = () => {
+		const unlayer = emailEditorRef.current?.editor;
+
+		unlayer?.exportHtml((data) => {
+			const { design, html } = data;
+			console.log("exportHtml", html);
+		});
+	};
+	const onReady: EmailEditorProps["onReady"] = () => {
+		const unlayer: any = emailEditorRef.current?.editor;
+		unlayer.loadDesign(data);
+	};
+
 	useEffect(() => {
 		const getEmailDetails = async () => {
 			await getDetails({ title: subject, ownerId: user?.id }).then(
 				(res) => {
-					if (res) setData(JSON.parse(res?.content));
+					if (res) {
+						setData(JSON.parse(res?.content));
+					}
 					setLoading(false);
 				}
 			);
 		};
 		getEmailDetails();
-	}, [user]);
-
-	const onReady: EmailEditorProps["onReady"] = (unlayer) => {
-		unlayer.loadDesign(data);
-	};
-
+	}, []);
 	const saveDraft = async () => {
 		const unlayer = emailEditorRef.current?.editor;
 		unlayer?.exportHtml(async (data) => {
 			const { design } = data;
-
-			const res = await apiClient
-				.post("/emails", {
-					title: subject,
-					content: JSON.stringify(design),
-					ownerId: user?.id,
-				})
-				.then((res) => {
-					toast.success("Draft saved");
-					// history.push("/dashboard/write");
-				})
-				.catch((err) => {
-					toast.error("Error saving draft");
-				});
+			setData(design);
+			await saveEmail({
+				title: subject,
+				content: JSON.stringify(design),
+				ownerId: user?.id,
+			}).then((res) => {
+				toast.success("Draft saved");
+				// history.push("/dashboard/write");
+			});
 		});
 	};
 

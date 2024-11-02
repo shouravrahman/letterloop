@@ -100,7 +100,9 @@ const Header = () => {
 				{/* CTA on large screens */}
 				{!user ? (
 					<div className="hidden lg:flex ">
-						<RegisterLink>Get Started</RegisterLink>
+						<RegisterLink className="btn btn-primary">
+							Get Started
+						</RegisterLink>
 					</div>
 				) : (
 					<Link
