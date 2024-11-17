@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 			}
 
 			const stripePortalUrl = await createCustomerPortal({
-				customerId: user.customerId,
+				customerId: dbUser.customerId,
 				returnUrl: body.returnUrl,
 			});
 
