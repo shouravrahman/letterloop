@@ -1,24 +1,22 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/libs/next-auth";
-import connectDB from "@/lib/mongodb";
+
 import { createCustomerPortal } from "@/lib/stripe";
 import User from "@/models/User";
+import { currentUser } from "@clerk/nextjs/server";
+import { connectDB } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
-	const session = await getServerSession(authOptions);
+	const user = await currentUser();
 
-	if (session) {
+	if (user) {
 		try {
 			await connectDB();
 
 			const body = await req.json();
 
-			const { id } = session.user;
+			const dbUser = await User.findById(user.id);
 
-			const user = await User.findById(id);
-
-			if (!user?.customerId) {
+			if (!dbUser?.customerId) {
 				return NextResponse.json(
 					{
 						error: "You don't have a billing account yet. Make a purchase first.",

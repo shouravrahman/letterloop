@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import connectDB from "@/lib/mongodb";
+import { connectDB } from "@/lib/mongodb";
 import configFile from "@/config";
 import User from "@/models/User";
 import { findCheckoutSession } from "@/lib/stripe";

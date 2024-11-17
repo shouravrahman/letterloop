@@ -9,6 +9,7 @@ interface IUser extends Document {
 	profileImageUrl?: string;
 	createdAt: Date;
 	lastSignInAt?: Date;
+	customerId?: string;
 }
 
 // Define the Mongoose schema
@@ -19,6 +20,7 @@ const UserSchema: Schema = new Schema(
 		lastName: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		profileImageUrl: { type: String, default: "" },
+		customerId: { type: String },
 		createdAt: { type: Date, required: true, default: Date.now },
 	},
 	{ timestamps: true }
