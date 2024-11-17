@@ -2,8 +2,8 @@
 
 import { connectDB } from "@/lib/mongodb";
 import Email from "@/models/Email";
+import { auth } from "@clerk/nextjs/server";
 
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 export const saveEmail = async ({
 	title,
 	content,
@@ -14,9 +14,9 @@ export const saveEmail = async ({
 	ownerId: string;
 }) => {
 	console.log(ownerId, content);
-	const { isAuthenticated } = getKindeServerSession();
-	const isUserAuthenticated = await isAuthenticated();
-	if (!isUserAuthenticated) return null;
+	const { userId, redirectToSignIn } = await auth();
+
+	if (!userId) return redirectToSignIn();
 
 	try {
 		await connectDB();
@@ -33,7 +33,7 @@ export const saveEmail = async ({
 			});
 		}
 	} catch (error) {
-		return { message: "Email update failed" };
 		console.log(error);
+		return { message: "Email update failed" };
 	}
 };

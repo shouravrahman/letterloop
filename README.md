@@ -17,7 +17,7 @@ The Newsletter Management Application is a web-based platform designed to help u
 - **Frontend**: React, Next.js, TypeScript, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
-- **Authentication**: Kinde for user authentication
+- **Authentication**: Clerk for user authentication
 - **State Management**: React hooks for managing component state
 
 ## Getting Started
@@ -26,7 +26,7 @@ The Newsletter Management Application is a web-based platform designed to help u
 
 - Node.js (v14 or later)
 - MongoDB (local or cloud instance)
-- A Kinde account for authentication
+- A Clerk account for authentication
 
 ### Installation
 
@@ -45,8 +45,9 @@ The Newsletter Management Application is a web-based platform designed to help u
    Create a `.env.local` file in the root directory and add the following variables:
    ```plaintext
    MONGODB_URI=your_mongodb_connection_string
-   KINDE_CLIENT_ID=your_kinde_client_id
-   KINDE_CLIENT_SECRET=your_kinde_client_secret
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
    ```
 
 4. **Run the application**:
@@ -74,4 +75,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Acknowledgments
 
 - Thanks to the contributors and the open-source community for their support and resources.
-- Special thanks to Kinde for providing authentication services.
+- Special thanks to Clerk for providing authentication services.

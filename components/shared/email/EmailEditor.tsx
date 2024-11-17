@@ -2,28 +2,17 @@
 import { getDetails } from "@/actions/getEmailDetails";
 import { saveEmail } from "@/actions/saveEmail";
 import { simpleEmailTemplate } from "@/data/mails/default.ts";
-import apiClient from "@/lib/api";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { useRouter } from "next/navigation";
+import { useUser } from '@clerk/clerk-react'
 import { useEffect, useRef, useState } from "react";
 import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
 import { toast } from "sonner";
+
 const Editor = ({ subject }: { subject: string }) => {
 	const [loading, setLoading] = useState(true);
-	const [data, setData] = useState(simpleEmailTemplate);
-	const history = useRouter();
-	const { getUser } = useKindeBrowserClient();
-	const user = getUser();
+   const [data, setData] = useState(simpleEmailTemplate);
+   const { isSignedIn, user, isLoaded } = useUser()
 	const emailEditorRef = useRef<EditorRef>(null);
 
-	const exportHtml = () => {
-		const unlayer = emailEditorRef.current?.editor;
-
-		unlayer?.exportHtml((data) => {
-			const { design, html } = data;
-			console.log("exportHtml", html);
-		});
-	};
 	const onReady: EmailEditorProps["onReady"] = () => {
 		const unlayer: any = emailEditorRef.current?.editor;
 		unlayer.loadDesign(data);
@@ -31,28 +20,37 @@ const Editor = ({ subject }: { subject: string }) => {
 
 	useEffect(() => {
 		const getEmailDetails = async () => {
-			await getDetails({ title: subject, ownerId: user?.id }).then(
-				(res) => {
-					if (res) {
-						setData(JSON.parse(res?.content));
-					}
-					setLoading(false);
-				}
-			);
+         try {
+            const res = await getDetails({
+               title: subject,
+               ownerId: user?.id,
+            });
+            if (res) {
+               setData(JSON.parse(res?.content));
+               console.log("res", res);
+            }
+         } catch (error) {
+            console.error("Failed to fetch email details:", error);
+         } finally {
+            setLoading(false);
+         }
 		};
-		getEmailDetails();
-	}, []);
+
+      if (user?.id && subject) {
+         getEmailDetails();
+      }
+   }, [subject, user?.id]);
+
 	const saveDraft = async () => {
 		const unlayer = emailEditorRef.current?.editor;
 		unlayer?.exportHtml(async (data) => {
-			const { design } = data;
-			setData(design);
+         const { design } = data;
 			await saveEmail({
 				title: subject,
 				content: JSON.stringify(design),
 				ownerId: user?.id,
 			}).then((res) => {
-				toast.success("Draft saved");
+            toast.success(res.message);
 				// history.push("/dashboard/write");
 			});
 		});
@@ -61,11 +59,12 @@ const Editor = ({ subject }: { subject: string }) => {
 	return (
 		<>
 			{!loading && (
-				<div className="w-full border relative">
+            <div className="w-full h-full flex flex-col border relative">
 					<EmailEditor
-						minHeight={"80vh"}
+                  style={{ flex: 1 }}
 						ref={emailEditorRef}
 						onReady={onReady}
+                  minHeight={"60vh"}
 						options={{
 							version: "latest",
 							appearance: {

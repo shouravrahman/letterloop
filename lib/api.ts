@@ -1,7 +1,8 @@
 import axios from "axios";
-import { toast } from "react-hot-toast";
+
 
 import config from "@/config";
+import { toast } from "sonner";
 
 // use this to interact with our own API (/app/api folder) from the front-end side
 // See https://letterloop.vercel.app/docs/tutorials/api-call

@@ -16,20 +16,25 @@ const deleteAtPath = (obj: any, path: string[], index: number) => {
 };
 
 const toJSON = <T extends Document>(schema: Schema<T>) => {
-  schema.set('toJSON', {
-    transform: function (doc, ret) {
-      Object.keys(schema.paths).forEach((path) => {
-        if (schema.paths[path].options && schema.paths[path].options.private) {
-          deleteAtPath(ret, path.split('.'), 0);
-        }
-      });
+  schema.set("toJSON", {
+		virtuals: true,
+		transform: function (doc, ret) {
+			Object.keys(schema.paths).forEach((path) => {
+				if (
+					schema.paths[path].options &&
+					schema.paths[path].options.private
+				) {
+					deleteAtPath(ret, path.split("."), 0);
+				}
+			});
 
-      if (ret._id) {
-        ret.id = ret._id.toString();
-      }
-      delete ret._id;
-      delete ret.__v;
-    },
+			if (ret._id) {
+				ret.id = ret._id.toString();
+			}
+			delete ret._id;
+			delete ret.__v;
+			return ret;
+		},
   });
 };
 

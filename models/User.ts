@@ -1,62 +1,28 @@
-import mongoose from "mongoose";
-import toJSON from "./plugins/toJSON";
-export interface UserDocument {
-	_id: string;
+import mongoose, { Schema, Document } from "mongoose";
+
+interface IUser extends Document {
+	clerkId: string;
+	firstName: string;
+	lastName: string;
 	email: string;
-	password: string;
-	name: string;
-	phone: string;
-	image: string;
+	isEmailVerified: boolean;
+	profileImageUrl?: string;
 	createdAt: Date;
-	updatedAt: Date;
-	priceId: string;
-	customerId: string;
-	hasAccess: boolean;
+	lastSignInAt?: Date;
 }
-// USER SCHEMA
-const userSchema = new mongoose.Schema<UserDocument>(
+
+// Define the Mongoose schema
+const UserSchema: Schema = new Schema(
 	{
-		name: {
-			type: String,
-			trim: true,
-		},
-		email: {
-			type: String,
-			trim: true,
-			lowercase: true,
-			private: true,
-		},
-		image: {
-			type: String,
-		},
-		// Used in the Stripe webhook to identify the user in Stripe and later create Customer Portal or prefill user credit card details
-		customerId: {
-			type: String,
-			validate(value: string) {
-				return value.includes("cus_");
-			},
-		},
-		// Used in the Stripe webhook. should match a plan in config.js file.
-		priceId: {
-			type: String,
-			validate(value: string) {
-				return value.includes("price_");
-			},
-		},
-		// Used to determine if the user has access to the product—it's turn on/off by the Stripe webhook
-		hasAccess: {
-			type: Boolean,
-			default: false,
-		},
+		clerkId: { type: String, required: true, unique: true },
+		firstName: { type: String, required: true },
+		lastName: { type: String, required: true },
+		email: { type: String, required: true, unique: true },
+		profileImageUrl: { type: String, default: "" },
+		createdAt: { type: Date, required: true, default: Date.now },
 	},
-	{
-		timestamps: true,
-		toJSON: { virtuals: true },
-	}
+	{ timestamps: true }
 );
 
-// add plugin that converts mongoose to json
-userSchema.plugin(toJSON);
-
-export default mongoose.models.User ||
-	mongoose.model<UserDocument>("User", userSchema);
+const User = mongoose.model<IUser>("User", UserSchema);
+export default User;

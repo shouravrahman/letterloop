@@ -17,5 +17,5 @@ const subscriberSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 subscriberSchema.plugin(toJSON);
 
-export default mongoose.models.Email ||
-	mongoose.model("Email", subscriberSchema);
+export default mongoose.models.Subscriber ||
+	mongoose.model("Subscriber", subscriberSchema);

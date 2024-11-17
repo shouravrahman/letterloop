@@ -1,31 +1,25 @@
 import { ReactNode } from "react";
-import { redirect } from "next/navigation";
 
-import config from "@/config";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar.tsx";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import { auth } from '@clerk/nextjs/server'
 import DashboardNavbar from "@/components/DashboardNavbar";
 
 export default async function LayoutPrivate({
    children,
 }: {
-   children: ReactNode;
+      children: ReactNode;
 }) {
+   const { userId, redirectToSignIn } = await auth();
 
-   const { isAuthenticated, getUser } = getKindeServerSession();
-   const user = await getUser();
-   // console.log(user)
-   if (!isAuthenticated) redirect("/")
+   if (!userId) return redirectToSignIn();
 
    return (
-		<div className="flex flex-grow">
-			<aside className="h-full">
-				<DashboardSidebar />
-			</aside>
-			<main className="w-full">
+      <div className="flex flex-col lg:flex-row w-full h-screen">
+         <DashboardSidebar />
+         <div className="flex-1 flex flex-col">
 				<DashboardNavbar />
-				{children}
-			</main>
+            <main className="flex-1 overflow-y-auto p-4">{children}</main>
+         </div>
 		</div>
    );
 }

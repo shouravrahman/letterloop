@@ -192,9 +192,9 @@ const features = [
 				{[
 					{
 						id: 1,
-						text: "Can we have a feature to add a custom domain to IndiePage?",
+                  text: "Can we have a feature to add a custom domain to letterloop?",
 						userImg:
-							"https://pbs.twimg.com/profile_images/1514863683574599681/9k7PqDTA_400x400.jpg",
+                     "https://avatars.githubusercontent.com/u/73746355?v=4",
 						userName: "letterloop",
 						createdAt: "2024-09-01T00:00:00Z",
 					},
@@ -202,7 +202,7 @@ const features = [
 						id: 2,
 						text: "I'd definitelly pay for that 🤩",
 						userImg:
-							"https://pbs.twimg.com/profile_images/1778434561556320256/knBJT1OR_400x400.jpg",
+                     "",
 						userName: "Dan K.",
 						createdAt: "2024-09-02T00:00:00Z",
 						transition:

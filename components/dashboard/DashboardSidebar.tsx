@@ -1,73 +1,81 @@
 "use client";
 import React, { useState } from "react";
-import { Logo } from "../landingpage/Logo.tsx";
+import { Logo } from "../landingpage/Logo";
 import {
-   Edit,
-   LayoutDashboard,
-   TrendingUp,
-   Users,
-   DollarSign,
-   Settings,
-   Globe,
-   LogOut,
+	Edit,
+	LayoutDashboard,
+	TrendingUp,
+	Users,
+	DollarSign,
+	Settings,
+	Globe,
+	LogOut,
+	Menu,
+	X,
 } from "lucide-react";
 import Link from "next/link";
-import PricingCard from "../shared/cards/SubscriptionCard.tsx";
+import PricingCard from "../shared/cards/SubscriptionCard";
 
 interface SidebarLink {
-   href: string;
-   label: string;
-   icon: React.ElementType;
+	href: string;
+	label: string;
+	icon: React.ElementType;
 }
 
 const links: SidebarLink[] = [
-   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-   { href: "/dashboard/write", label: "Write", icon: Edit },
-   { href: "/grow", label: "Grow", icon: TrendingUp },
-   { href: "/audience", label: "Audience", icon: Users },
-   { href: "/billing", label: "Billing", icon: DollarSign },
-   { href: "/settings", label: "Settings", icon: Settings },
-   { href: "/dashboard/view-site", label: "View Site", icon: Globe },
-   { href: "/sign-out", label: "Sign Out", icon: LogOut },
+	{ href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+	{ href: "/dashboard/write", label: "Write", icon: Edit },
+	{ href: "/dashboard/grow", label: "Grow", icon: TrendingUp },
+	{ href: "/dashboard/subscribers", label: "Subscribers", icon: Users },
+	{ href: "/dashboard/billing", label: "Billing", icon: DollarSign },
+	{ href: "/dashboard/settings", label: "Settings", icon: Settings },
+	{ href: "/dashboard/view-site", label: "View Site", icon: Globe },
+	{ href: "/sign-out", label: "Sign Out", icon: LogOut },
 ];
 
 const DashboardSidebar = () => {
-   const [show, setShow] = useState(true);
+	const [show, setShow] = useState(false);
 
-   return (
-		<div className=" overflow-y-hidden bg-white relative h-dvh">
-			<div className="rounded xl:hidden flex justify-between w-full p-6 items-center border-b border-gray-200 ">
-				<Logo />
-			</div>
-			<div
-				id="Main"
-				className={`${
-					show ? "translate-x-0" : "-translate-x-full"
-				} rounded transform xl:translate-x-0 ease-in-out transition duration-500 flex justify-start items-start w-full sm:w-64 border-r border-b border-gray-200 flex-col h-full font-semibold`}
+	const toggleSidebar = () => {
+		setShow(!show);
+	};
+
+	return (
+		<div className="lg:w-64 bg-white border-r border-gray-200 flex flex-col z-20">
+			<button
+				className="lg:hidden p-2 bg-gray-200 rounded m-4"
+				onClick={toggleSidebar}
 			>
-				<div className="hidden xl:flex px-10 py-4 items-center border-gray-200 border-b w-full">
+				{show ? <X /> : <Menu />}
+			</button>
+			<div
+				className={`fixed lg:static top-0 left-0 h-full w-64 bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 ease-in-out ${
+					show ? "translate-x-0" : "-translate-x-full"
+				} lg:translate-x-0`}
+			>
+				<div className="p-6 border-b border-gray-200">
 					<Logo />
 				</div>
-				<div className="mt-6 flex flex-col justify-start items-center px-4 w-full space-y-3 pb-5">
+				<div className="flex flex-col p-4 space-y-3">
 					{links.map((link) => (
 						<Link
 							key={link.href}
 							href={link.href}
-							className="focus:outline-none flex justify-start  focus:bg-indigo-500 focus:text-white hover:bg-indigo-300/20  rounded py-3 pl-4 items-center space-x-6 w-full"
+							className="flex items-center space-x-4 p-2 hover:bg-indigo-100 rounded"
 						>
-							<link.icon className="" />
-							<p className="text-base leading-4">{link.label}</p>
+							<link.icon className="w-5 h-5" />
+							<span>{link.label}</span>
 						</Link>
 					))}
 				</div>
 				<PricingCard
 					planName="Free Plan"
-					totalSubscribers={500} // Example value
+					totalSubscribers={500}
 					upgradeHref="/upgrade-plan"
 				/>
 			</div>
 		</div>
-   );
+	);
 };
 
 export default DashboardSidebar;

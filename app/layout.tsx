@@ -7,6 +7,7 @@ import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
 import "./globals.css";
 
+
 const font = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {

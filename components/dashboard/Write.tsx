@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { getEmails } from "@/actions/getEmails";
 import { DeleteIcon, MailOpenIcon } from "lucide-react";
 import Link from "next/link";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useUser } from '@clerk/clerk-react'
 
 const Write = () => {
 	const [email, setEmail] = useState();
@@ -30,8 +30,7 @@ const Write = () => {
 		const cachedEmails = localStorage.getItem("emails");
 		return cachedEmails ? JSON.parse(cachedEmails) : null;
 	});
-	const { getUser } = useKindeBrowserClient();
-	const user = getUser();
+   const { isSignedIn, user, isLoaded } = useUser()
 	const handleCreate = () => {
 		if (subject.length === 0) {
 			toast.error("No subject provided!");
@@ -112,7 +111,7 @@ const Write = () => {
 							.replace(/&/g, "-");
 						return (
 							<div
-								key={i?._id}
+                        key={i}
 								className="w-[200px] h-[250px] flex flex-col items-center justify-center rounded-lg shadow-sm hover:shadow-md border cursor-pointer relative"
 							>
 								<span

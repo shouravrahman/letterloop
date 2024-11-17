@@ -1,15 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { JSX } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import config from "@/config";
-import ButtonSignin from "../ButtonSignin.tsx";
 import { Logo } from "./Logo.tsx";
-import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+
+   SignInButton,
+   SignedIn,
+   SignedOut,
+   useAuth,
+   UserButton
+} from '@clerk/nextjs'
+
 
 const links: {
 	href: string;
@@ -33,10 +37,10 @@ const links: {
 // The header is responsive, and on mobile, the links are hidden behind a burger button.
 const Header = () => {
 	const searchParams = useSearchParams();
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const { getUser } = useKindeBrowserClient();
-	const user = getUser();
+   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+   let user = false
+   const { getToken, isLoaded, isSignedIn } = useAuth()
 	// setIsOpen(false) when the route changes (i.e: when the user clicks on a link on mobile)
 	useEffect(() => {
 		setIsOpen(false);
@@ -98,11 +102,9 @@ const Header = () => {
 				</div>
 
 				{/* CTA on large screens */}
-				{!user ? (
+            {!isSignedIn ? (
 					<div className="hidden lg:flex ">
-						<RegisterLink className="btn btn-primary">
-							Get Started
-						</RegisterLink>
+                  <SignInButton>Get Started</SignInButton>
 					</div>
 				) : (
 					<Link

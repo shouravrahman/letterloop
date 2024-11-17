@@ -3,10 +3,10 @@
 import { connectDB } from "@/lib/mongodb";
 import Subscriber from "@/models/Subcriber";
 
-export const getSubscribers = async () => {
+export const getSubscribers = async (ownerId: string) => {
 	try {
 		await connectDB();
-		const subscribers = await Subscriber.find({});
+		const subscribers = await Subscriber.find({ ownerId: ownerId });
 		return subscribers;
 	} catch (error) {
 		console.log(error.message);
